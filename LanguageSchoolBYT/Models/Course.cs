@@ -1,17 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LanguageSchoolBYT.Models
 {
     public class Course
     {
+        // -----------------------------
         // STATIC EXTENT
+        // -----------------------------
         private static List<Course> _extent = new();
         public static IReadOnlyList<Course> Extent => _extent.AsReadOnly();
 
-        private static void AddToExtent(Course c) => _extent.Add(c);
+        private static void AddToExtent(Course c)
+        {
+            if (c == null)
+                throw new ArgumentException("Course cannot be null.");
+            _extent.Add(c);
+        }
 
+        // -----------------------------
         // ATTRIBUTES
+        // -----------------------------
         private string _name;
         private string _title;
         private int _level;
@@ -22,13 +32,13 @@ namespace LanguageSchoolBYT.Models
         public string Name
         {
             get => _name;
-            set => _name = value;
+            set => _name = value ?? throw new ArgumentException("Name cannot be null.");
         }
 
         public string Title
         {
             get => _title;
-            set => _title = value;
+            set => _title = value ?? throw new ArgumentException("Title cannot be null.");
         }
 
         public int Level
@@ -55,7 +65,54 @@ namespace LanguageSchoolBYT.Models
             set => _gpaWeight = value;
         }
 
+        // -----------------------------
+        // ASSOCIATION CLASS:
+        // Course 1 —— 0..* Enrollment
+        // -----------------------------
+        private HashSet<Enrollment> _enrollments = new();
+        public IReadOnlyCollection<Enrollment> Enrollments =>
+            _enrollments.ToList().AsReadOnly();
+
+        /// <summary>
+        /// INTERNAL — Enrollment tarafından çağrılır.
+        /// Direkt kullanma — her ilişki Enrollment factory tarafından kurulmalıdır.
+        /// </summary>
+        internal void AddEnrollmentInternal(Enrollment e)
+        {
+            if (e == null)
+                throw new ArgumentException("Enrollment cannot be null.");
+
+            _enrollments.Add(e);
+        }
+
+        /// <summary>
+        /// INTERNAL — Enrollment cancel edildiğinde çağrılır.
+        /// </summary>
+        internal void RemoveEnrollmentInternal(Enrollment e)
+        {
+            _enrollments.Remove(e);
+        }
+
+        // -----------------------------
+        // HELPER METHODS (OPTIONAL)
+        // -----------------------------
+
+        /// <summary>
+        /// Returns true if student is already enrolled in this course.
+        /// </summary>
+        public bool IsStudentEnrolled(Student s)
+        {
+            foreach (var en in _enrollments)
+            {
+                if (en.Student == s)
+                    return true;
+            }
+            return false;
+        }
+
+        // -----------------------------
         // CONSTRUCTORS
+        // -----------------------------
         public Course()
         {
             AddToExtent(this);
