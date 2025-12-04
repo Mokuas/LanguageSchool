@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using BYTProject.Core.Models;   
+using System.Linq;
 
-namespace BYTProject.Models
+namespace LanguageSchoolBYT.Models
 {
     public class Student : Person
     {
-       
+        // -----------------------------
         // STATIC EXTENT (UML)
-        
+        // -----------------------------
         private static List<Student> _extent = new();
 
         public static IReadOnlyList<Student> Extent => _extent.AsReadOnly();
@@ -22,9 +22,9 @@ namespace BYTProject.Models
             _extent.Add(s);
         }
 
-        
+        // -----------------------------
         // INSTANCE ATTRIBUTES (UML)
-        
+        // -----------------------------
         private int _studentNumber;
         private decimal _accountBalance;
         private int _yearOfStudy;
@@ -32,9 +32,9 @@ namespace BYTProject.Models
         private int _currentSemester;
         private int _attendance;
 
-        
+        // -----------------------------
         // PROPERTIES (VALIDATION)
-        
+        // -----------------------------
         public int StudentNumber
         {
             get => _studentNumber;
@@ -97,46 +97,168 @@ namespace BYTProject.Models
         }
 
         
-        // METHODS 
+        // BASIC ASSOCIATION (Student → Group, 0..1)
+       
+        private Group? _group;
+        public Group? Group => _group;
+
+        internal void AssignGroup(Group g)
+        {
+            if (g == null)
+                throw new ArgumentException("Group cannot be null.");
+
+            if (_group == g)
+                return;
+
+            // Eğer başka bir gruptaysa, o gruptan çıkar
+            if (_group != null)
+            {
+                _group.RemoveStudent(this);
+            }
+
+            _group = g;
+        }
+
+        internal void RemoveGroup(Group g)
+        {
+            if (_group != g)
+                throw new Exception("Student is not assigned to this group.");
+
+            _group = null;
+        }
+
+      
+        // QUALIFIED ASSOCIATION: Student 1 —— 0..* Invoice
+        // qualifier: Invoice.Number (string)
+      
+        private Dictionary<string, Invoice> _invoicesByNumber = new();
+        public IReadOnlyDictionary<string, Invoice> InvoicesByNumber =>
+            new Dictionary<string, Invoice>(_invoicesByNumber);
+
         
-        public void ViewAvailableCourse()
+        /// Adds an invoice to this student using Invoice.Number as qualifier.
+        
+        public void AddInvoice(Invoice invoice)
         {
-            
-        }
+            if (invoice == null)
+                throw new ArgumentException("Invoice cannot be null.");
 
-        public void ViewInvoiceAndPayment()
-        {
-            
-        }
+            if (string.IsNullOrWhiteSpace(invoice.Number))
+                throw new ArgumentException("Invoice must have a valid Number as qualifier.");
 
-        public void ApplyForScholarship()
-        {
-            
-        }
+            if (_invoicesByNumber.ContainsKey(invoice.Number))
+                throw new Exception($"Invoice with number {invoice.Number} already exists for this student.");
 
-        public void EnrollInCourse()
-        {
-            
-        }
+            // Invoice başka bir öğrenciye bağlıysa
+            if (invoice.Student != null && invoice.Student != this)
+                throw new Exception("Invoice is already assigned to another student.");
 
-        public void ViewAssessmentAndGrades()
-        {
-           
-        }
+            _invoicesByNumber.Add(invoice.Number, invoice);
 
-        public void DownloadMaterials()
-        {
-           
+            // reverse connection
+            invoice.SetStudentInternal(this);
         }
-
 
         
+        /// Removes invoice by its number (qualifier).
+        
+        public void RemoveInvoice(string number)
+        {
+            if (string.IsNullOrWhiteSpace(number))
+                throw new ArgumentException("Invoice number cannot be empty.");
+
+            if (!_invoicesByNumber.TryGetValue(number, out var invoice))
+                throw new Exception("Invoice with this number is not registered for this student.");
+
+            _invoicesByNumber.Remove(number);
+
+            // reverse connection
+            invoice.ClearStudentInternal(this);
+        }
+
+        
+        /// Returns invoice by qualifier or null if not found.
+        
+        public Invoice? GetInvoiceByNumber(string number)
+        {
+            if (string.IsNullOrWhiteSpace(number))
+                throw new ArgumentException("Invoice number cannot be empty.");
+
+            return _invoicesByNumber.TryGetValue(number, out var inv) ? inv : null;
+        }
+
+        
+        /// Qualified association kuralına göre:
+        /// Invoice.Number değişirse dictionary'deki key de güncellenmeli.
+        /// Bu method Invoice içinden çağrılır.
+        
+        internal void UpdateInvoiceQualifier(string oldNumber, string newNumber, Invoice invoice)
+        {
+            if (string.IsNullOrWhiteSpace(oldNumber) || string.IsNullOrWhiteSpace(newNumber))
+                throw new ArgumentException("Invoice numbers cannot be empty.");
+
+            if (!_invoicesByNumber.ContainsKey(oldNumber))
+                throw new Exception("Old invoice number not found for this student.");
+
+            if (_invoicesByNumber.ContainsKey(newNumber))
+                throw new Exception("Another invoice with the new number already exists for this student.");
+
+            _invoicesByNumber.Remove(oldNumber);
+            _invoicesByNumber.Add(newNumber, invoice);
+        }
+
+       
+        // ASSOCIATION CLASS:
+        // Student 1 —— 0..* Enrollment
+     
+        private HashSet<Enrollment> _enrollments = new();
+        public IReadOnlyCollection<Enrollment> Enrollments =>
+            _enrollments.ToList().AsReadOnly();
+
+     
+        /// INTERNAL — Enrollment tarafından çağrılır.
+        /// Doğrudan dışarıdan çağrılmamalı.
+      
+        internal void AddEnrollmentInternal(Enrollment e)
+        {
+            if (e == null)
+                throw new ArgumentException("Enrollment cannot be null.");
+
+            _enrollments.Add(e);
+        }
+
+        
+        /// INTERNAL — Enrollment cancel edildiğinde çağrılır.
+        
+        internal void RemoveEnrollmentInternal(Enrollment e)
+        {
+            _enrollments.Remove(e);
+        }
+
+        
+        /// Bu öğrencinin belirli bir derse kayıtlı olup olmadığını kontrol eder.
+        
+        public bool IsEnrolledInCourse(Course c)
+        {
+            if (c == null)
+                throw new ArgumentException("Course cannot be null.");
+
+            foreach (var en in _enrollments)
+            {
+                if (en.Course == c)
+                    return true;
+            }
+
+            return false;
+        }
+
+       
+       
+       
         // CONSTRUCTORS
-        
-        
+       
         public Student() { }
 
-        
         public Student(
             string name,
             string surname,
@@ -163,9 +285,9 @@ namespace BYTProject.Models
             AddToExtent(this);
         }
 
-        
+      
         // TXT PERSISTENCY 
-       
+        
         public static void Save(string path = "students.txt")
         {
             var lines = new List<string>();
