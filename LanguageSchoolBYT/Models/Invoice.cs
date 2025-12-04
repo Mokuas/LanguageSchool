@@ -70,9 +70,7 @@ namespace LanguageSchoolBYT.Models
             set => _scholarship = value;
         }
 
-        /// <summary>
-        /// QUALIFIER field — Number değişirse Student içindeki dictionary de güncellenmelidir.
-        /// </summary>
+        
         public string Number
         {
             get => _number;
@@ -81,7 +79,7 @@ namespace LanguageSchoolBYT.Models
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException("Invoice Number cannot be empty.");
 
-                // If Number changes, update Student's dictionary (Qualified Association logic)
+                
                 if (_student != null && _number != value)
                 {
                     _student.UpdateInvoiceQualifier(_number, value, this);
@@ -124,7 +122,7 @@ namespace LanguageSchoolBYT.Models
         // -----------------------------
         public Invoice()
         {
-            // Qualified association gereği student burada set edilmez.
+            
             AddToExtent(this);
         }
 
@@ -149,13 +147,10 @@ namespace LanguageSchoolBYT.Models
             AddToExtent(this);
         }
 
-        // -----------------------------
-        // DELETE INVOICE
-        // (Örneğin Student tarafından kaldırıldığında kullanılabilir)
-        // -----------------------------
+        
         public void Delete()
         {
-            // önce öğrenci ilişkisi koparılır
+            
             if (_student != null)
             {
                 _student.RemoveInvoice(_number);

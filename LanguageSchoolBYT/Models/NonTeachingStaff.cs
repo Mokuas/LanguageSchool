@@ -39,10 +39,7 @@ namespace LanguageSchoolBYT.Models
         // PUBLIC METHODS
         // -----------------------------
 
-        /// <summary>
-        /// Assigns a supervisor to this staff member.
-        /// Handles reverse connection automatically.
-        /// </summary>
+       
         public void SetSupervisor(NonTeachingStaff supervisor)
         {
             if (supervisor == null)
@@ -51,11 +48,11 @@ namespace LanguageSchoolBYT.Models
             if (supervisor == this)
                 throw new Exception("A staff member cannot supervise themselves.");
 
-            // Döngü (cycle) engelleme: supervisor zaten bu kişinin altında ise
+            
             if (IsSubordinateOf(supervisor))
                 throw new Exception("Circular supervision is not allowed.");
 
-            // Eğer supervisor zaten atanmışsa ve farklıysa → eski supervisor’dan kaldır
+            
             if (_supervisor != null && _supervisor != supervisor)
             {
                 _supervisor.RemoveSubordinateInternal(this);
