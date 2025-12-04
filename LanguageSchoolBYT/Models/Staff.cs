@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 
-
 namespace LanguageSchoolBYT.Models
 {
     public class Staff : Person
@@ -33,32 +32,6 @@ namespace LanguageSchoolBYT.Models
             if (value < 0)
                 throw new ArgumentException("Experience bonus per year cannot be negative.");
             ExperienceBonusPerYear = value;
-        }
-
-        // -----------------------------
-        // CONSTRUCTORS
-        // -----------------------------
-        // JSON / manual load için boş constructor
-        public Staff() { }
-
-        public Staff(
-            string name,
-            string surname,
-            DateTime birthDate,
-            string email,
-            DateTime hireDate,
-            decimal baseSalary,
-            int experienceYears,
-            string? middleName = null
-        ) : base(name, surname, birthDate, email)
-        {
-            MiddleName = middleName;
-
-            HireDate = hireDate;
-            BaseSalary = baseSalary;
-            ExperienceYears = experienceYears;
-
-            AddToExtent(this);
         }
 
         // -----------------------------
@@ -108,32 +81,88 @@ namespace LanguageSchoolBYT.Models
         {
             get
             {
-                // Basit formül:
-                // Toplam maaş = BaseSalary + ExperienceYears * ExperienceBonusPerYear
                 return BaseSalary + ExperienceYears * ExperienceBonusPerYear;
             }
         }
 
+        // -----------------------------
+        // AGGREGATION: Staff 0..1 —— 1 Department
+        // -----------------------------
+        private Department? _department;
+        public Department? Department => _department;
+
+       
+        public void ChangeDepartment(Department newDepartment)
+        {
+            if (newDepartment == null)
+                throw new ArgumentException("New department cannot be null.");
+
+            if (_department == newDepartment)
+                return;
+
+            
+            if (_department != null)
+            {
+                _department.RemoveStaff(this);
+            }
+
+           
+            newDepartment.AddStaff(this);
+        }
+
+        /// <summary>
+        /// Sadece Department.AddStaff tarafından çağrılmalı (reverse connection).
+        /// </summary>
+        internal void SetDepartmentInternal(Department dept)
+        {
+            if (dept == null)
+                throw new ArgumentException("Department cannot be null.");
+
+            _department = dept;
+        }
+
+        /// <summary>
+        /// Sadece Department.RemoveStaff tarafından çağrılmalı (reverse connection).
+        /// </summary>
+        internal void ClearDepartmentInternal(Department dept)
+        {
+            if (_department != dept)
+                throw new Exception("Staff does not belong to this department.");
+
+            _department = null;
+        }
+
+        // -----------------------------
+        // CONSTRUCTORS
+        // -----------------------------
+        // JSON / manual load için boş constructor
+        public Staff() { }
+
+        public Staff(
+            string name,
+            string surname,
+            DateTime birthDate,
+            string email,
+            DateTime hireDate,
+            decimal baseSalary,
+            int experienceYears,
+            string? middleName = null
+        ) : base(name, surname, birthDate, email)
+        {
+            MiddleName = middleName;
+
+            HireDate = hireDate;
+            BaseSalary = baseSalary;
+            ExperienceYears = experienceYears;
+
+            AddToExtent(this);
+        }
 
         // -----------------------------
         // XML PERSISTENCY
         // -----------------------------
         public static void SaveXml(string path = "staff.xml")
         {
-            // <StaffMembers>
-            //   <Staff>
-            //     <Name>...</Name>
-            //     <MiddleName>...</MiddleName>
-            //     <Surname>...</Surname>
-            //     <Email>...</Email>
-            //     <BirthDate>2000-01-01</BirthDate>
-            //     <HireDate>2020-01-01</HireDate>
-            //     <BaseSalary>5000</BaseSalary>
-            //     <ExperienceYears>5</ExperienceYears>
-            //   </Staff>
-            //   ...
-            // </StaffMembers>
-
             var root = new XElement("StaffMembers");
 
             foreach (var s in _extent)
@@ -190,5 +219,4 @@ namespace LanguageSchoolBYT.Models
             }
         }
     }
-
 }
