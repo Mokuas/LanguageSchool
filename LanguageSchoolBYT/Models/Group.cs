@@ -6,18 +6,18 @@ namespace LanguageSchoolBYT.Models
 {
     public class Group
     {
-        // -----------------------------
+       
         // STATIC EXTENT
-        // -----------------------------
+      
         private static List<Group> _extent = new();
         public static IReadOnlyList<Group> Extent => _extent.AsReadOnly();
 
         private static void AddToExtent(Group g) => _extent.Add(g);
         private static void RemoveFromExtent(Group g) => _extent.Remove(g);
 
-        // -----------------------------
+      
         // ATTRIBUTES
-        // -----------------------------
+      
         private string _name;
         private string _scheduleNote;
         private int _headCount;
@@ -49,9 +49,9 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        // -----------------------------
+       
         // BASIC ASSOCIATION (1..* WITH STUDENT)
-        // -----------------------------
+    
         private HashSet<Student> _students = new();
         public IReadOnlyCollection<Student> Students => _students.ToList().AsReadOnly();
 
@@ -89,15 +89,15 @@ namespace LanguageSchoolBYT.Models
             s.RemoveGroup(this);
         }
 
-        // -----------------------------
+    
         // COMPOSITION: Group 0..* —— 1 ClassSession
-        // -----------------------------
+        
         private HashSet<ClassSession> _sessions = new();
         public IReadOnlyCollection<ClassSession> Sessions => _sessions.ToList().AsReadOnly();
 
-        /// <summary>
+       
         /// Composition: yeni bir ClassSession sadece Group üzerinden yaratılabilir.
-        /// </summary>
+      
         public ClassSession CreateSession(DateTime startTime, DateTime endTime, string topic, Room room)
         {
             if (room == null)
@@ -108,9 +108,9 @@ namespace LanguageSchoolBYT.Models
             return session;
         }
 
-        /// <summary>
+       
         /// Composition: Group içindeki oturumu kaldırır ve part objesini yok eder.
-        /// </summary>
+       
         public void RemoveSession(ClassSession session)
         {
             if (session == null)
@@ -123,10 +123,10 @@ namespace LanguageSchoolBYT.Models
             session.DeleteFromGroup(); // part kendi extent’inden silinir
         }
 
-        /// <summary>
+     
         /// Composition: Group silindiğinde tüm ClassSession'lar da silinir.
         /// (Unit test’te bunu kontrol edeceksin)
-        /// </summary>
+        
         public void DeleteGroup()
         {
             // önce tüm composition part'ları sil
@@ -147,9 +147,9 @@ namespace LanguageSchoolBYT.Models
             RemoveFromExtent(this);
         }
 
-        // -----------------------------
+       
         // CONSTRUCTORS
-        // -----------------------------
+       
         public Group()
         {
             AddToExtent(this);

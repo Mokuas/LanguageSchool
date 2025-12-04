@@ -5,9 +5,9 @@ namespace LanguageSchoolBYT.Models
 {
     public class Enrollment
     {
-        // -----------------------------
+  
         // STATIC EXTENT
-        // -----------------------------
+     
         private static List<Enrollment> _extent = new();
         public static IReadOnlyList<Enrollment> Extent => _extent.AsReadOnly();
 
@@ -23,9 +23,9 @@ namespace LanguageSchoolBYT.Models
             _extent.Remove(e);
         }
 
-        // -----------------------------
+       
         // ATTRIBUTES (ASSOCIATION CLASS)
-        // -----------------------------
+       
         private DateTime _enroledOn;
         private string _status;
         private double? _finalGrade; // optional
@@ -63,20 +63,19 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        // -----------------------------
         // ASSOCIATION LINKS
         // Enrollment 1 —— 1 Student
         // Enrollment 1 —— 1 Course
-        // -----------------------------
+      
         private Student _student;
         private Course _course;
 
         public Student Student => _student;
         public Course Course => _course;
 
-        // -----------------------------
-        // FACTORY METHOD (ÖNERİLEN KULLANIM)
-        // -----------------------------
+       
+        // FACTORY METHOD 
+        
         public static Enrollment EnrollStudentInCourse(
             Student student,
             Course course,
@@ -100,10 +99,10 @@ namespace LanguageSchoolBYT.Models
             return enrollment;
         }
 
-        // -----------------------------
+        
         // PRIVATE CONSTRUCTOR
         // Sadece factory method kullanılsın diye
-        // -----------------------------
+        
         private Enrollment(Student student, Course course, DateTime enroledOn, string status, double? finalGrade)
         {
             _student = student;
@@ -120,9 +119,9 @@ namespace LanguageSchoolBYT.Models
             AddToExtent(this);
         }
 
-        // -----------------------------
+        
         // CHANGE / UPDATE METHODS
-        // -----------------------------
+        
         public void UpdateStatus(string newStatus)
         {
             Status = newStatus;
@@ -133,9 +132,9 @@ namespace LanguageSchoolBYT.Models
             FinalGrade = newGrade;
         }
 
-        // -----------------------------
+      
         // DELETE ENROLLMENT
-        // -----------------------------
+     
         public void Cancel()
         {
             // reverse connection temizle

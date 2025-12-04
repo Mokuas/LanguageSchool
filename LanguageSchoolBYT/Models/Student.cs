@@ -96,9 +96,9 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        // -----------------------------
+        
         // BASIC ASSOCIATION (Student → Group, 0..1)
-        // -----------------------------
+       
         private Group? _group;
         public Group? Group => _group;
 
@@ -127,17 +127,17 @@ namespace LanguageSchoolBYT.Models
             _group = null;
         }
 
-        // -----------------------------
+      
         // QUALIFIED ASSOCIATION: Student 1 —— 0..* Invoice
         // qualifier: Invoice.Number (string)
-        // -----------------------------
+      
         private Dictionary<string, Invoice> _invoicesByNumber = new();
         public IReadOnlyDictionary<string, Invoice> InvoicesByNumber =>
             new Dictionary<string, Invoice>(_invoicesByNumber);
 
-        /// <summary>
+        
         /// Adds an invoice to this student using Invoice.Number as qualifier.
-        /// </summary>
+        
         public void AddInvoice(Invoice invoice)
         {
             if (invoice == null)
@@ -159,9 +159,9 @@ namespace LanguageSchoolBYT.Models
             invoice.SetStudentInternal(this);
         }
 
-        /// <summary>
+        
         /// Removes invoice by its number (qualifier).
-        /// </summary>
+        
         public void RemoveInvoice(string number)
         {
             if (string.IsNullOrWhiteSpace(number))
@@ -176,9 +176,9 @@ namespace LanguageSchoolBYT.Models
             invoice.ClearStudentInternal(this);
         }
 
-        /// <summary>
+        
         /// Returns invoice by qualifier or null if not found.
-        /// </summary>
+        
         public Invoice? GetInvoiceByNumber(string number)
         {
             if (string.IsNullOrWhiteSpace(number))
@@ -187,11 +187,11 @@ namespace LanguageSchoolBYT.Models
             return _invoicesByNumber.TryGetValue(number, out var inv) ? inv : null;
         }
 
-        /// <summary>
+        
         /// Qualified association kuralına göre:
         /// Invoice.Number değişirse dictionary'deki key de güncellenmeli.
         /// Bu method Invoice içinden çağrılır.
-        /// </summary>
+        
         internal void UpdateInvoiceQualifier(string oldNumber, string newNumber, Invoice invoice)
         {
             if (string.IsNullOrWhiteSpace(oldNumber) || string.IsNullOrWhiteSpace(newNumber))
@@ -207,18 +207,18 @@ namespace LanguageSchoolBYT.Models
             _invoicesByNumber.Add(newNumber, invoice);
         }
 
-        // -----------------------------
+       
         // ASSOCIATION CLASS:
         // Student 1 —— 0..* Enrollment
-        // -----------------------------
+     
         private HashSet<Enrollment> _enrollments = new();
         public IReadOnlyCollection<Enrollment> Enrollments =>
             _enrollments.ToList().AsReadOnly();
 
-        /// <summary>
+     
         /// INTERNAL — Enrollment tarafından çağrılır.
         /// Doğrudan dışarıdan çağrılmamalı.
-        /// </summary>
+      
         internal void AddEnrollmentInternal(Enrollment e)
         {
             if (e == null)
@@ -227,17 +227,17 @@ namespace LanguageSchoolBYT.Models
             _enrollments.Add(e);
         }
 
-        /// <summary>
+        
         /// INTERNAL — Enrollment cancel edildiğinde çağrılır.
-        /// </summary>
+        
         internal void RemoveEnrollmentInternal(Enrollment e)
         {
             _enrollments.Remove(e);
         }
 
-        /// <summary>
+        
         /// Bu öğrencinin belirli bir derse kayıtlı olup olmadığını kontrol eder.
-        /// </summary>
+        
         public bool IsEnrolledInCourse(Course c)
         {
             if (c == null)
@@ -252,19 +252,11 @@ namespace LanguageSchoolBYT.Models
             return false;
         }
 
-        // -----------------------------
-        // METHODS (UML’dan boş bırakılmış)
-        // -----------------------------
-        public void ViewAvailableCourse() { }
-        public void ViewInvoiceAndPayment() { }
-        public void ApplyForScholarship() { }
-        public void EnrollInCourse() { }
-        public void ViewAssessmentAndGrades() { }
-        public void DownloadMaterials() { }
-
-        // -----------------------------
+       
+       
+       
         // CONSTRUCTORS
-        // -----------------------------
+       
         public Student() { }
 
         public Student(
@@ -293,9 +285,9 @@ namespace LanguageSchoolBYT.Models
             AddToExtent(this);
         }
 
-        // -----------------------------
+      
         // TXT PERSISTENCY 
-        // -----------------------------
+        
         public static void Save(string path = "students.txt")
         {
             var lines = new List<string>();
