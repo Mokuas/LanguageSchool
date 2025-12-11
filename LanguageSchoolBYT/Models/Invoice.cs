@@ -5,9 +5,7 @@ namespace LanguageSchoolBYT.Models
 {
     public class Invoice
     {
-        // -----------------------------
         // STATIC EXTENT
-        // -----------------------------
         private static List<Invoice> _extent = new();
         public static IReadOnlyList<Invoice> Extent => _extent.AsReadOnly();
 
@@ -22,17 +20,15 @@ namespace LanguageSchoolBYT.Models
         {
             _extent.Remove(inv);
         }
-
-        // -----------------------------
+        
         // ATTRIBUTES
-        // -----------------------------
         private string _name;
         private decimal _amount;
         private DateTime _paidAt;
         private DateTime _dueDate;
         private string _method;
         private string? _scholarship;
-        private string _number; // QUALIFIER — MUST BE UNIQUE PER STUDENT
+        private string _number; 
 
         public string Name
         {
@@ -89,16 +85,13 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        // -----------------------------
+        
         // QUALIFIED ASSOCIATION (Invoice → Student: 1)
-        // -----------------------------
         private Student? _student;
         public Student? Student => _student;
 
-        /// <summary>
-        /// INTERNAL — Reverse connection only from Student.AddInvoice()
-        /// </summary>
-        internal void SetStudentInternal(Student s)
+        
+        public void SetStudentInternal(Student s)
         {
             if (s == null)
                 throw new ArgumentException("Student cannot be null.");
@@ -106,10 +99,8 @@ namespace LanguageSchoolBYT.Models
             _student = s;
         }
 
-        /// <summary>
-        /// INTERNAL — Reverse connection only from Student.RemoveInvoice()
-        /// </summary>
-        internal void ClearStudentInternal(Student s)
+        
+        public void ClearStudentInternal(Student s)
         {
             if (_student != s)
                 throw new Exception("This invoice does not belong to the given student.");
@@ -117,9 +108,8 @@ namespace LanguageSchoolBYT.Models
             _student = null;
         }
 
-        // -----------------------------
+       
         // CONSTRUCTORS
-        // -----------------------------
         public Invoice()
         {
             
