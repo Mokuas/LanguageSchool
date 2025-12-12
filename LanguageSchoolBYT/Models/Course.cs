@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿
 namespace LanguageSchoolBYT.Models
 {
     public class Course
     {
-        // -----------------------------
+      
         // STATIC EXTENT
-        // -----------------------------
+     
         private static List<Course> _extent = new();
         public static IReadOnlyList<Course> Extent => _extent.AsReadOnly();
 
@@ -19,9 +16,9 @@ namespace LanguageSchoolBYT.Models
             _extent.Add(c);
         }
 
-        // -----------------------------
+      
         // ATTRIBUTES
-        // -----------------------------
+     
         private string _name;
         private string _title;
         private int _level;
@@ -65,18 +62,18 @@ namespace LanguageSchoolBYT.Models
             set => _gpaWeight = value;
         }
 
-        // -----------------------------
+        
         // ASSOCIATION CLASS:
         // Course 1 —— 0..* Enrollment
-        // -----------------------------
+      
         private HashSet<Enrollment> _enrollments = new();
         public IReadOnlyCollection<Enrollment> Enrollments =>
             _enrollments.ToList().AsReadOnly();
 
-        /// <summary>
+       
         /// INTERNAL — Enrollment tarafından çağrılır.
         /// Direkt kullanma — her ilişki Enrollment factory tarafından kurulmalıdır.
-        /// </summary>
+       
         internal void AddEnrollmentInternal(Enrollment e)
         {
             if (e == null)
@@ -85,21 +82,13 @@ namespace LanguageSchoolBYT.Models
             _enrollments.Add(e);
         }
 
-        /// <summary>
+       
         /// INTERNAL — Enrollment cancel edildiğinde çağrılır.
-        /// </summary>
         internal void RemoveEnrollmentInternal(Enrollment e)
         {
             _enrollments.Remove(e);
         }
-
-        // -----------------------------
-        // HELPER METHODS (OPTIONAL)
-        // -----------------------------
-
-        /// <summary>
-        /// Returns true if student is already enrolled in this course.
-        /// </summary>
+        
         public bool IsStudentEnrolled(Student s)
         {
             foreach (var en in _enrollments)
@@ -110,9 +99,9 @@ namespace LanguageSchoolBYT.Models
             return false;
         }
 
-        // -----------------------------
+      
         // CONSTRUCTORS
-        // -----------------------------
+        
         public Course()
         {
             AddToExtent(this);

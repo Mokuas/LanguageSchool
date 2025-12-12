@@ -5,17 +5,17 @@ namespace LanguageSchoolBYT.Models
 {
     public class NonTeachingStaff : Staff
     {
-        // -----------------------------
+      
         // STATIC EXTENT
-        // -----------------------------
+       
         private static List<NonTeachingStaff> _extent = new();
         public static IReadOnlyList<NonTeachingStaff> Extent => _extent.AsReadOnly();
 
         private static void AddToExtent(NonTeachingStaff nts) => _extent.Add(nts);
 
-        // -----------------------------
+       
         // ATTRIBUTE
-        // -----------------------------
+       
         private string _role;
         public string Role
         {
@@ -23,11 +23,11 @@ namespace LanguageSchoolBYT.Models
             set => _role = value ?? throw new ArgumentException("Role cannot be null.");
         }
 
-        // -----------------------------
+        
         // REFLEXIVE ASSOCIATION
         // supervisor: 0..1
         // subordinate: 0..*
-        // -----------------------------
+        
         private NonTeachingStaff? _supervisor;
         public NonTeachingStaff? Supervisor => _supervisor;
 
@@ -35,14 +35,11 @@ namespace LanguageSchoolBYT.Models
         public IReadOnlyCollection<NonTeachingStaff> Subordinates =>
             new List<NonTeachingStaff>(_subordinates).AsReadOnly();
 
-        // -----------------------------
-        // PUBLIC METHODS
-        // -----------------------------
-
-        /// <summary>
-        /// Assigns a supervisor to this staff member.
-        /// Handles reverse connection automatically.
-        /// </summary>
+       
+        
+        /// Assigns a supervisor to this staff member
+        /// Handles reverse connection oto
+       
         public void SetSupervisor(NonTeachingStaff supervisor)
         {
             if (supervisor == null)
@@ -51,11 +48,11 @@ namespace LanguageSchoolBYT.Models
             if (supervisor == this)
                 throw new Exception("A staff member cannot supervise themselves.");
 
-            // Döngü (cycle) engelleme: supervisor zaten bu kişinin altında ise
+            // cycle engelleme supervisor zaten bu kişinin altında ise
             if (IsSubordinateOf(supervisor))
                 throw new Exception("Circular supervision is not allowed.");
 
-            // Eğer supervisor zaten atanmışsa ve farklıysa → eski supervisor’dan kaldır
+            // Eğer supervisor zaten atanmışsa ve farklıysa  eski supervisor’dan kaldır
             if (_supervisor != null && _supervisor != supervisor)
             {
                 _supervisor.RemoveSubordinateInternal(this);
@@ -67,9 +64,9 @@ namespace LanguageSchoolBYT.Models
             supervisor.AddSubordinateInternal(this);
         }
 
-        /// <summary>
-        /// Removes the supervisor (if any).
-        /// </summary>
+        
+        /// Removes the supervisor if any
+       
         public void RemoveSupervisor()
         {
             if (_supervisor == null)
@@ -79,9 +76,9 @@ namespace LanguageSchoolBYT.Models
             _supervisor = null;
         }
 
-        // -----------------------------
+        
         // INTERNAL REVERSE METHODS
-        // -----------------------------
+      
         internal void AddSubordinateInternal(NonTeachingStaff staff)
         {
             _subordinates.Add(staff);
@@ -92,9 +89,9 @@ namespace LanguageSchoolBYT.Models
             _subordinates.Remove(staff);
         }
 
-        // -----------------------------
+        
         // HELPER: Check recursive subordinate chain
-        // -----------------------------
+        
         private bool IsSubordinateOf(NonTeachingStaff possibleSupervisor)
         {
             NonTeachingStaff? current = possibleSupervisor;
@@ -110,9 +107,9 @@ namespace LanguageSchoolBYT.Models
             return false;
         }
 
-        // -----------------------------
+        
         // CONSTRUCTORS
-        // -----------------------------
+       
         public NonTeachingStaff()
         {
             AddToExtent(this);

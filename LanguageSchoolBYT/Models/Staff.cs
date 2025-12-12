@@ -7,9 +7,9 @@ namespace LanguageSchoolBYT.Models
 {
     public class Staff : Person
     {
-        // -----------------------------
+        
         // STATIC EXTENT
-        // -----------------------------
+      
         private static List<Staff> _extent = new();
 
         public static IReadOnlyList<Staff> Extent => _extent.AsReadOnly();
@@ -22,9 +22,9 @@ namespace LanguageSchoolBYT.Models
             _extent.Add(s);
         }
 
-        // -----------------------------
-        // STATIC ATTRIBUTES (SALARY CONFIG)
-        // -----------------------------
+      
+        // STATIC ATTRIBUTES 
+        
         public static decimal ExperienceBonusPerYear { get; private set; } = 200m;
 
         public static void SetExperienceBonusPerYear(decimal value)
@@ -33,10 +33,8 @@ namespace LanguageSchoolBYT.Models
                 throw new ArgumentException("Experience bonus per year cannot be negative.");
             ExperienceBonusPerYear = value;
         }
-
-        // -----------------------------
+        
         // INSTANCE ATTRIBUTES
-        // -----------------------------
         private DateTime _hireDate;
         private decimal _baseSalary;
         private int _experienceYears;
@@ -74,9 +72,9 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        // -----------------------------
+       
         // DERIVED SALARY LOGIC
-        // -----------------------------
+        
         public decimal TotalSalary
         {
             get
@@ -85,9 +83,9 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        // -----------------------------
+       
         // AGGREGATION: Staff 0..1 —— 1 Department
-        // -----------------------------
+       
         private Department? _department;
         public Department? Department => _department;
 
@@ -110,9 +108,9 @@ namespace LanguageSchoolBYT.Models
             newDepartment.AddStaff(this);
         }
 
-        /// <summary>
-        /// Sadece Department.AddStaff tarafından çağrılmalı (reverse connection).
-        /// </summary>
+     
+        /// Sadece Department.AddStaff tarafından çağrılmalı reverse connection
+       
         internal void SetDepartmentInternal(Department dept)
         {
             if (dept == null)
@@ -121,9 +119,9 @@ namespace LanguageSchoolBYT.Models
             _department = dept;
         }
 
-        /// <summary>
-        /// Sadece Department.RemoveStaff tarafından çağrılmalı (reverse connection).
-        /// </summary>
+      
+        /// Sadece Department.RemoveStaff tarafından çağrılmalı reverse connection
+        
         internal void ClearDepartmentInternal(Department dept)
         {
             if (_department != dept)
@@ -132,10 +130,10 @@ namespace LanguageSchoolBYT.Models
             _department = null;
         }
 
-        // -----------------------------
+      
         // CONSTRUCTORS
-        // -----------------------------
-        // JSON / manual load için boş constructor
+       
+        // JSON  manual load için boş constructor
         public Staff() { }
 
         public Staff(
@@ -158,9 +156,9 @@ namespace LanguageSchoolBYT.Models
             AddToExtent(this);
         }
 
-        // -----------------------------
+       
         // XML PERSISTENCY
-        // -----------------------------
+        
         public static void SaveXml(string path = "staff.xml")
         {
             var root = new XElement("StaffMembers");
