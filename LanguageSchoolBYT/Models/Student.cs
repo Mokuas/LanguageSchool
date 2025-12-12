@@ -7,9 +7,7 @@ namespace LanguageSchoolBYT.Models
 {
     public class Student : Person
     {
-        // -----------------------------
         // STATIC EXTENT (UML)
-        // -----------------------------
         private static List<Student> _extent = new();
 
         public static IReadOnlyList<Student> Extent => _extent.AsReadOnly();
@@ -22,9 +20,8 @@ namespace LanguageSchoolBYT.Models
             _extent.Add(s);
         }
 
-        // -----------------------------
+        
         // INSTANCE ATTRIBUTES (UML)
-        // -----------------------------
         private int _studentNumber;
         private decimal _accountBalance;
         private int _yearOfStudy;
@@ -32,9 +29,8 @@ namespace LanguageSchoolBYT.Models
         private int _currentSemester;
         private int _attendance;
 
-        // -----------------------------
+        
         // PROPERTIES (VALIDATION)
-        // -----------------------------
         public int StudentNumber
         {
             get => _studentNumber;
@@ -110,7 +106,7 @@ namespace LanguageSchoolBYT.Models
             if (_group == g)
                 return;
 
-            // Eğer başka bir gruptaysa, o gruptan çıkar
+            
             if (_group != null)
             {
                 _group.RemoveStudent(this);
@@ -129,14 +125,14 @@ namespace LanguageSchoolBYT.Models
 
       
         // QUALIFIED ASSOCIATION: Student 1 —— 0..* Invoice
-        // qualifier: Invoice.Number (string)
+        
       
         private Dictionary<string, Invoice> _invoicesByNumber = new();
         public IReadOnlyDictionary<string, Invoice> InvoicesByNumber =>
             new Dictionary<string, Invoice>(_invoicesByNumber);
 
         
-        /// Adds an invoice to this student using Invoice.Number as qualifier.
+        
         
         public void AddInvoice(Invoice invoice)
         {
@@ -149,7 +145,7 @@ namespace LanguageSchoolBYT.Models
             if (_invoicesByNumber.ContainsKey(invoice.Number))
                 throw new Exception($"Invoice with number {invoice.Number} already exists for this student.");
 
-            // Invoice başka bir öğrenciye bağlıysa
+            
             if (invoice.Student != null && invoice.Student != this)
                 throw new Exception("Invoice is already assigned to another student.");
 
@@ -160,7 +156,7 @@ namespace LanguageSchoolBYT.Models
         }
 
         
-        /// Removes invoice by its number (qualifier).
+       
         
         public void RemoveInvoice(string number)
         {
@@ -177,7 +173,7 @@ namespace LanguageSchoolBYT.Models
         }
 
         
-        /// Returns invoice by qualifier or null if not found.
+        
         
         public Invoice? GetInvoiceByNumber(string number)
         {
@@ -188,9 +184,7 @@ namespace LanguageSchoolBYT.Models
         }
 
         
-        /// Qualified association kuralına göre:
-        /// Invoice.Number değişirse dictionary'deki key de güncellenmeli.
-        /// Bu method Invoice içinden çağrılır.
+        
         
         internal void UpdateInvoiceQualifier(string oldNumber, string newNumber, Invoice invoice)
         {
@@ -216,10 +210,9 @@ namespace LanguageSchoolBYT.Models
             _enrollments.ToList().AsReadOnly();
 
      
-        /// INTERNAL — Enrollment tarafından çağrılır.
-        /// Doğrudan dışarıdan çağrılmamalı.
+        
       
-        internal void AddEnrollmentInternal(Enrollment e)
+        public void AddEnrollmentInternal(Enrollment e)
         {
             if (e == null)
                 throw new ArgumentException("Enrollment cannot be null.");
@@ -228,15 +221,15 @@ namespace LanguageSchoolBYT.Models
         }
 
         
-        /// INTERNAL — Enrollment cancel edildiğinde çağrılır.
         
-        internal void RemoveEnrollmentInternal(Enrollment e)
+        
+        public void RemoveEnrollmentInternal(Enrollment e)
         {
             _enrollments.Remove(e);
         }
 
         
-        /// Bu öğrencinin belirli bir derse kayıtlı olup olmadığını kontrol eder.
+      
         
         public bool IsEnrolledInCourse(Course c)
         {

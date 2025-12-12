@@ -5,8 +5,9 @@ namespace LanguageSchoolBYT.Models
 {
     public class Invoice
     {
-        
+        // -----------------------------
         // STATIC EXTENT
+        // -----------------------------
         private static List<Invoice> _extent = new();
         public static IReadOnlyList<Invoice> Extent => _extent.AsReadOnly();
 
@@ -22,9 +23,9 @@ namespace LanguageSchoolBYT.Models
             _extent.Remove(inv);
         }
 
-     
+        // -----------------------------
         // ATTRIBUTES
-        
+        // -----------------------------
         private string _name;
         private decimal _amount;
         private DateTime _paidAt;
@@ -69,9 +70,9 @@ namespace LanguageSchoolBYT.Models
             set => _scholarship = value;
         }
 
-     
+        /// <summary>
         /// QUALIFIER field — Number değişirse Student içindeki dictionary de güncellenmelidir.
-       
+        /// </summary>
         public string Number
         {
             get => _number;
@@ -90,15 +91,15 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-       
-        // QUALIFIED ASSOCIATION 
-    
+        // -----------------------------
+        // QUALIFIED ASSOCIATION (Invoice → Student: 1)
+        // -----------------------------
         private Student? _student;
         public Student? Student => _student;
 
-        
+        /// <summary>
         /// INTERNAL — Reverse connection only from Student.AddInvoice()
-       
+        /// </summary>
         internal void SetStudentInternal(Student s)
         {
             if (s == null)
@@ -107,9 +108,9 @@ namespace LanguageSchoolBYT.Models
             _student = s;
         }
 
-      
+        /// <summary>
         /// INTERNAL — Reverse connection only from Student.RemoveInvoice()
-      
+        /// </summary>
         internal void ClearStudentInternal(Student s)
         {
             if (_student != s)
@@ -118,8 +119,9 @@ namespace LanguageSchoolBYT.Models
             _student = null;
         }
 
-   
+        // -----------------------------
         // CONSTRUCTORS
+        // -----------------------------
         public Invoice()
         {
             // Qualified association gereği student burada set edilmez.
@@ -147,10 +149,10 @@ namespace LanguageSchoolBYT.Models
             AddToExtent(this);
         }
 
-  
+        // -----------------------------
         // DELETE INVOICE
-        // Örneğin Student tarafından kaldırıldığında kullanılabilir
-    
+        // (Örneğin Student tarafından kaldırıldığında kullanılabilir)
+        // -----------------------------
         public void Delete()
         {
             // önce öğrenci ilişkisi koparılır
