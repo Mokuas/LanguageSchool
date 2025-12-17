@@ -20,4 +20,7 @@
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LanguageSchoolBYT\LanguageSchoolBYT.csproj" />
+  </ItemGroup>
 </Project>
