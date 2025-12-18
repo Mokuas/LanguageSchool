@@ -5,9 +5,11 @@ using System.Xml.Linq;
 
 namespace LanguageSchoolBYT.Models
 {
-    public class Staff : Person
+    public abstract class Staff : Person
     {
+        
         // STATIC EXTENT
+      
         private static List<Staff> _extent = new();
 
         public static IReadOnlyList<Staff> Extent => _extent.AsReadOnly();
@@ -20,8 +22,9 @@ namespace LanguageSchoolBYT.Models
             _extent.Add(s);
         }
 
-       
-        // STATIC ATTRIBUTES (SALARY CONFIG)
+      
+        // STATIC ATTRIBUTES 
+        
         public static decimal ExperienceBonusPerYear { get; private set; } = 200m;
 
         public static void SetExperienceBonusPerYear(decimal value)
@@ -30,7 +33,6 @@ namespace LanguageSchoolBYT.Models
                 throw new ArgumentException("Experience bonus per year cannot be negative.");
             ExperienceBonusPerYear = value;
         }
-
         
         // INSTANCE ATTRIBUTES
         private DateTime _hireDate;
@@ -70,8 +72,9 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        
+       
         // DERIVED SALARY LOGIC
+        
         public decimal TotalSalary
         {
             get
@@ -82,6 +85,7 @@ namespace LanguageSchoolBYT.Models
 
        
         // AGGREGATION: Staff 0..1 —— 1 Department
+       
         private Department? _department;
         public Department? Department => _department;
 
@@ -104,7 +108,9 @@ namespace LanguageSchoolBYT.Models
             newDepartment.AddStaff(this);
         }
 
-        
+     
+        /// Sadece Department.AddStaff tarafından çağrılmalı reverse connection
+       
         internal void SetDepartmentInternal(Department dept)
         {
             if (dept == null)
@@ -113,6 +119,8 @@ namespace LanguageSchoolBYT.Models
             _department = dept;
         }
 
+      
+        /// Sadece Department.RemoveStaff tarafından çağrılmalı reverse connection
         
         internal void ClearDepartmentInternal(Department dept)
         {
@@ -122,8 +130,10 @@ namespace LanguageSchoolBYT.Models
             _department = null;
         }
 
-        
+      
         // CONSTRUCTORS
+       
+        // JSON  manual load için boş constructor
         public Staff() { }
 
         public Staff(
@@ -146,8 +156,9 @@ namespace LanguageSchoolBYT.Models
             AddToExtent(this);
         }
 
-        
+       
         // XML PERSISTENCY
+        
         public static void SaveXml(string path = "staff.xml")
         {
             var root = new XElement("StaffMembers");
@@ -202,7 +213,7 @@ namespace LanguageSchoolBYT.Models
                 decimal baseSalary = decimal.Parse((string?)el.Element("BaseSalary") ?? throw new Exception("BaseSalary missing in XML"));
                 int experienceYears = int.Parse((string?)el.Element("ExperienceYears") ?? throw new Exception("ExperienceYears missing in XML"));
 
-                new Staff(name, surname, birth, email, hireDate, baseSalary, experienceYears, middle);
+               
             }
         }
     }

@@ -109,7 +109,7 @@ namespace LanguageSchoolBYT.Models
         }
 
        
-        /// Composition: Group içindeki oturumu kaldırır ve part objesini yok eder.
+        /// Composition Group içindeki oturumu kaldırır ve part objesini yok eder.
        
         public void RemoveSession(ClassSession session)
         {

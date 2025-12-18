@@ -5,7 +5,9 @@ namespace LanguageSchoolBYT.Models
 {
     public class Invoice
     {
+   
         // STATIC EXTENT
+      
         private static List<Invoice> _extent = new();
         public static IReadOnlyList<Invoice> Extent => _extent.AsReadOnly();
 
@@ -20,15 +22,17 @@ namespace LanguageSchoolBYT.Models
         {
             _extent.Remove(inv);
         }
-        
+
+    
         // ATTRIBUTES
+        
         private string _name;
         private decimal _amount;
         private DateTime _paidAt;
         private DateTime _dueDate;
         private string _method;
         private string? _scholarship;
-        private string _number; 
+        private string _number; // QUALIFIER — MUST BE UNIQUE PER STUDENT
 
         public string Name
         {
@@ -66,7 +70,9 @@ namespace LanguageSchoolBYT.Models
             set => _scholarship = value;
         }
 
-        
+     
+        /// QUALIFIER field — Number değişirse Student içindeki dictionary de güncellenmelidir.
+       
         public string Number
         {
             get => _number;
@@ -75,7 +81,7 @@ namespace LanguageSchoolBYT.Models
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException("Invoice Number cannot be empty.");
 
-                
+                // If Number changes, update Student's dictionary (Qualified Association logic)
                 if (_student != null && _number != value)
                 {
                     _student.UpdateInvoiceQualifier(_number, value, this);
@@ -85,13 +91,16 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        
+      
         // QUALIFIED ASSOCIATION (Invoice → Student: 1)
+       
         private Student? _student;
         public Student? Student => _student;
 
-        
-        public void SetStudentInternal(Student s)
+      
+        /// INTERNAL — Reverse connection only from Student.AddInvoice()
+      
+        internal void SetStudentInternal(Student s)
         {
             if (s == null)
                 throw new ArgumentException("Student cannot be null.");
@@ -99,8 +108,9 @@ namespace LanguageSchoolBYT.Models
             _student = s;
         }
 
-        
-        public void ClearStudentInternal(Student s)
+        /// INTERNAL — Reverse connection only from Student.RemoveInvoice()
+       
+        internal void ClearStudentInternal(Student s)
         {
             if (_student != s)
                 throw new Exception("This invoice does not belong to the given student.");
@@ -108,11 +118,12 @@ namespace LanguageSchoolBYT.Models
             _student = null;
         }
 
-       
+     
         // CONSTRUCTORS
+        
         public Invoice()
         {
-            
+            // Qualified association gereği student burada set edilmez.
             AddToExtent(this);
         }
 
@@ -137,10 +148,12 @@ namespace LanguageSchoolBYT.Models
             AddToExtent(this);
         }
 
-        
+       
+        // DELETE INVOICE
+     
         public void Delete()
         {
-            
+            // önce öğrenci ilişkisi koparılır
             if (_student != null)
             {
                 _student.RemoveInvoice(_number);

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace LanguageSchoolBYT.Models
 {
     public class Enrollment
@@ -112,7 +110,7 @@ namespace LanguageSchoolBYT.Models
             Status = status;
             FinalGrade = finalGrade;
 
-            // reverse connection
+            // bıodırectıonal connection
             student.AddEnrollmentInternal(this);
             course.AddEnrollmentInternal(this);
 
@@ -137,7 +135,6 @@ namespace LanguageSchoolBYT.Models
      
         public void Cancel()
         {
-            // reverse connection temizle
             _student.RemoveEnrollmentInternal(this);
             _course.RemoveEnrollmentInternal(this);
 

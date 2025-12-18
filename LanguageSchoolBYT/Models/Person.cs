@@ -6,7 +6,9 @@ namespace LanguageSchoolBYT.Models
 {
     public abstract class Person
     {
+    
         // STATIC ATTRIBUTE (UML)
+     
         public static string SchoolName { get; private set; } = "pjatk";
 
         public static void SetSchoolName(string newName)
@@ -15,16 +17,19 @@ namespace LanguageSchoolBYT.Models
                 throw new ArgumentException("School name cannot be empty.");
             SchoolName = newName;
         }
-        
+
+      
         // INSTANCE ATTRIBUTES
+        
         private string _name;
         private string? _middleName;
         private string _surname;
         private string _email;
-        private DateTime _birthDate; 
+        private DateTime _birthDate; // /age derived from this
 
-        
+       
         // PROPERTIES
+     
         public string Name
         {
             get => _name;
@@ -80,8 +85,9 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        
-        // DERIVED ATTRIBUTE: 
+       
+        // DERIVED ATTRIBUTE: /age
+    
         public int Age
         {
             get
@@ -93,8 +99,9 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-       
-        // METHODS (UML)
+      
+        // METHODS 
+     
         public string GetFullName()
         {
             return MiddleName == null
@@ -103,8 +110,10 @@ namespace LanguageSchoolBYT.Models
         }
 
         public string GetEmail() => Email;
-        
+
+       
         // CONSTRUCTORS
+       
         protected Person() { }
 
         protected Person(string name, string surname, DateTime birthDate, string email)
@@ -116,8 +125,10 @@ namespace LanguageSchoolBYT.Models
 
             AddToExtent(this);
         }
-        
+
+    
         // EXTENT
+      
         private static List<Person> _extent = new();
 
         private static void AddToExtent(Person p)
@@ -130,8 +141,9 @@ namespace LanguageSchoolBYT.Models
 
         public static IReadOnlyList<Person> GetExtent() => _extent.AsReadOnly();
 
-        
-        // PERSISTENCY
+ 
+        // PERSISTENCY (TXT - NO LIBRARIES)
+    
         public static void Save(string path = "persons.txt")
         {
             var lines = new List<string>();
@@ -163,8 +175,9 @@ namespace LanguageSchoolBYT.Models
                 string surname = parts[2];
                 string email = parts[3];
                 DateTime birth = DateTime.Parse(parts[4]);
-                
+
+             
             }
-        }
-    }
+ }
+}
 }

@@ -5,18 +5,18 @@ namespace LanguageSchoolBYT.Models
 {
     public class ClassSession
     {
-        // -----------------------------
+     
         // STATIC EXTENT
-        // -----------------------------
+      
         private static List<ClassSession> _extent = new();
         public static IReadOnlyList<ClassSession> Extent => _extent.AsReadOnly();
 
         internal static void AddToExtent(ClassSession cs) => _extent.Add(cs);
         internal static void RemoveFromExtent(ClassSession cs) => _extent.Remove(cs);
 
-        // -----------------------------
+       
         // ATTRIBUTES
-        // -----------------------------
+       
         private DateTime _startTime;
         private DateTime _endTime;
         private string _topic;
@@ -49,22 +49,22 @@ namespace LanguageSchoolBYT.Models
             set => _topic = value ?? throw new ArgumentException("Topic cannot be null.");
         }
 
-        // -----------------------------
+     
         // COMPOSITION: belongs to ONE Group
-        // -----------------------------
+       
         private Group _group;
         public Group Group => _group;
 
-        // -----------------------------
-        // BASIC ASSOCIATION: placed in ONE Room (şimdilik basit)
-        // -----------------------------
+      
+        // BASIC ASSOCIATION: placed in ONE Room 
+       
         private Room _room;
         public Room Room => _room;
 
-        // -----------------------------
+      
         // CONSTRUCTOR - INTERNAL
-        // Sadece Group.CreateSession(...) üzerinden çağrılmalı
-        // -----------------------------
+        // Sadece Group.CreateSession üzerinden çağrılmalı
+     
         internal ClassSession(DateTime startTime, DateTime endTime, string topic, Group group, Room room)
         {
             if (group == null)
@@ -81,17 +81,12 @@ namespace LanguageSchoolBYT.Models
 
             AddToExtent(this);
         }
-
-        // -----------------------------
-        // COMPOSITION DELETION LOGIC
-        // -----------------------------
-        /// <summary>
-        /// Sadece Group tarafından çağrılır; session'ı extent'ten siler.
-        /// </summary>
+      
+       
         internal void DeleteFromGroup()
         {
             RemoveFromExtent(this);
-            // İleride Room ile reverse connection eklersek burada onu da temizleriz.
+          
         }
     }
 }

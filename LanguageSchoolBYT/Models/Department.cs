@@ -6,9 +6,9 @@ namespace LanguageSchoolBYT.Models
 {
     public class Department
     {
-        // -----------------------------
+       
         // STATIC EXTENT
-        // -----------------------------
+        
         private static List<Department> _extent = new();
         public static IReadOnlyList<Department> Extent => _extent.AsReadOnly();
 
@@ -19,9 +19,9 @@ namespace LanguageSchoolBYT.Models
             _extent.Add(d);
         }
 
-        // -----------------------------
+       
         // ATTRIBUTES
-        // -----------------------------
+      
         private string _deptID;
         private string _name;
 
@@ -47,9 +47,9 @@ namespace LanguageSchoolBYT.Models
             }
         }
 
-        // -----------------------------
+     
         // AGGREGATION: Department 1 —— 0..* Staff
-        // -----------------------------
+       
         private HashSet<Staff> _staffMembers = new();
         public IReadOnlyCollection<Staff> StaffMembers => _staffMembers.ToList().AsReadOnly();
 
@@ -85,9 +85,9 @@ namespace LanguageSchoolBYT.Models
             staff.ClearDepartmentInternal(this);
         }
 
-        // -----------------------------
+       
         // CONSTRUCTORS
-        // -----------------------------
+     
         public Department()
         {
             AddToExtent(this);
