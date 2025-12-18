@@ -1,9 +1,8 @@
 using NUnit.Framework;
-using BYTProject.Core.Models;
+using LanguageSchoolBYT.Models;
 using System;
 
-namespace BYTProject.Tests
-{
+namespace LanguageSchoolBYT.Tests;
     public class PersonTests
     {
 
@@ -49,7 +48,6 @@ namespace BYTProject.Tests
 
             var p = new TestPerson("John", "Doe", birth, "test@mail.com");
 
-            Assert.AreEqual("John Doe", p.GetFullName());
+            Assert.That(p.GetFullName(), Is.EqualTo("John Doe"));
         }
     }
-}
