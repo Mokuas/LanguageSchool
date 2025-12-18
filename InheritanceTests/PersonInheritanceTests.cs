@@ -16,15 +16,15 @@ namespace InheritanceTests
         public void Student_Is_Person()
         {
             var student = new Student(
-                "Ali",
-                "Yilmaz",
+                "Poyraz",
+                "Dinler",
                 new DateTime(2001, 5, 5),
-                "ali@student.com",
-                123,
+                "s29979@pjwstk.edu.pl",
+                29979,
                 0,
-                2,
-                3.2,
                 3,
+                3.2,
+                6,
                 85
             );
 
@@ -35,15 +35,15 @@ namespace InheritanceTests
         public void Person_Inheritance_Is_Overlapping()
         {
             var student = new Student(
-                "Ahmet",
-                "Kaya",
+                "Ileay",
+                "Cenik",
                 new DateTime(1999, 1, 1),
-                "a@student.com",
-                456,
+                "s29914@pjwstk.edu.pl",
+                29914,
                 0,
                 3,
                 3.6,
-                5,
+                6,
                 90
             );
 
