@@ -27,12 +27,15 @@ namespace LanguageSchoolBYT.Models
         }
 
         // CONSTRUCTORS
-        public Teacher() => AddToExtent(this);
+        public Teacher() : base()
+        {
+            AddToExtent(this);
+        }
 
         public Teacher(
             string specialization,
             string contract
-        )
+        ) : base()
         {
             Specialization = specialization;
             Contract = contract;

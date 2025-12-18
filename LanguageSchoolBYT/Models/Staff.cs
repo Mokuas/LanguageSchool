@@ -5,7 +5,7 @@ using System.Xml.Linq;
 
 namespace LanguageSchoolBYT.Models
 {
-    public class Staff : Person
+    public abstract class Staff : Person
     {
         
         // STATIC EXTENT
@@ -213,7 +213,7 @@ namespace LanguageSchoolBYT.Models
                 decimal baseSalary = decimal.Parse((string?)el.Element("BaseSalary") ?? throw new Exception("BaseSalary missing in XML"));
                 int experienceYears = int.Parse((string?)el.Element("ExperienceYears") ?? throw new Exception("ExperienceYears missing in XML"));
 
-                new Staff(name, surname, birth, email, hireDate, baseSalary, experienceYears, middle);
+               
             }
         }
     }
