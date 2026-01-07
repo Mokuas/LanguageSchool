@@ -3,7 +3,7 @@ namespace LanguageSchoolBYT.Models
 {
     public class Course
     {
-      
+        public CourseLanguageAspect LanguageAspect { get; } = new();
         // STATIC EXTENT
      
         private static List<Course> _extent = new();
